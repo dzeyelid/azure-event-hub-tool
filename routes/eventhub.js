@@ -8,27 +8,43 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/generate_signature', function(req, res, next) {
+  // create data for event hub
+  var data = createEventHubData(req);
+
   // create information to create SAS token
-  var uri = 'https://' + req.body.namespace + '.servicebus.windows.net' + '/' + req.body.hub_name + '/' + 'messages';
-  var key_name = req.body.sender_key_name;
-  var key = req.body.sender_key;
-  var ttl = req.body.token_ttl;
-  var token = create_sas_token(uri, key_name, key, ttl);
+  var token = createSasToken(data.uri, data.key_name, data.key, data.ttl);
   var result = {'token': token};
   res.send(result);
 });
 
-router.post('/send', function(req, res, next) {
-  var result = {'result': true};
-  res.send(result);
+router.post('/send_event', function(req, res, next) {
+  // create data for event hub
+  var data = createEventHubData(req);
+
+  // create information to create SAS token
+  var token = createSasToken(data.uri, data.key_name, data.key, data.ttl);
+
+  // Send Event
+  sendEvent(data, token);
 });
 
 module.exports = router;
 
-/* private function*/
+/**** private function ****/
 var moment = require('moment');
 var crypto = require('crypto');
-function create_sas_token(uri, key_name, key, ttl) {
+var https = require('https');
+
+/**
+ * Create SAS token
+ * 
+ * @param string uri
+ * @param string key_name
+ * @param string key
+ * @param string ttl
+ * @return string SAS token
+ */
+function createSasToken(uri, key_name, key, ttl) {
   // Token expires in one hour
   var expiry = moment().add(ttl, 'minites').unix();
   
@@ -42,4 +58,62 @@ function create_sas_token(uri, key_name, key, ttl) {
     '&skn=' + key_name;
     
   return token;
+}
+
+/**
+ * Create data for event hub
+ * 
+ * @param array req
+ * @return array data for event hub
+ */
+function createEventHubData(req) {
+  var hostname = req.body.namespace + '.servicebus.windows.net';
+  
+  var data = {
+    hostname: hostname,
+    uri: 'https://' + hostname + '/' + req.body.hub_name + '/' + 'messages',
+    key_name: req.body.sender_key_name,
+    key: req.body.sender_key,
+    ttl: req.body.token_ttl,
+    payload: req.body.payload,
+    };
+
+  return data;
+}
+
+/**
+ * Send Event to Azure Event Hub
+ * 
+ * @param array data
+ * @param string token
+ */
+function sendEvent(data, token) {
+  var options = {
+    hostname: data.hostname,
+    port: 443,
+    path: data.uri,
+    method: 'POST',
+    headers: {
+      'Authorization': token,
+      'Content-Length': data.payload.length,
+      'Content-Type': 'application/atom+xml;type=entry;charset=utf-8'
+    }
+  };
+  console.log("==== options = " + JSON.stringify(options));
+
+  var req = https.request(options, function(res) {
+    console.log("==== statusCode: ", res.statusCode);
+    console.log("==== headers: ", res.headers);
+
+    res.on('data', function(d) {
+      process.stdout.write(d);
+    });
+  });
+  
+  req.on('error', function(e) {
+    console.error(e);
+  });
+  
+  req.write(data.payload);
+  req.end();
 }

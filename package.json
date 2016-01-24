@@ -1,7 +1,7 @@
 {
-	"name": "NodejsStarterApp",
+	"name": "AzureEventHubTool",
 	"version": "0.0.1",
-	"description": "A sample nodejs app for Bluemix",
+	"description": "This app is a tool for Azure Event Hub",
 	"scripts": {
 		"start": "node app.js"
 	},
@@ -11,6 +11,7 @@
 		"body-parser": "",
 		"moment": "",
 		"crypto": "",
+		"https": "",
 		"cfenv": "1.0.x"
 	},
 	"repository": {},

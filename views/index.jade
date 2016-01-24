@@ -40,9 +40,14 @@ html
                 label.control-label(for="event-payload") Payload
                 textarea.col-md-9.form-control#event-payload
           div.col-md-12#actions
-            div.col-md-12.form-group
-              button.btn.btn-default#generate-signature Generate Signature
-              button.btn.btn-default#send-event Send Event
+            div.col-md-12
+              h3 Actions
+              div.col-md-2.form-group
+                button.btn.btn-default#generate-signature Generate Signature
+              div.col-md-2.form-group
+                button.btn.btn-default#send-event Send Event
+              div.col-md-8
+                div.alert-message
           div.col-md-12#outputs
             h2 Output
             div.col-md-12
