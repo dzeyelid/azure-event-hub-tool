@@ -1,0 +1,51 @@
+html
+  head
+    include ./head.jade
+    title= title
+    script(src='scripts/index.js')
+  body
+    div.container
+      h1 Azure Event Hub Tool
+      div.row
+        form.form-horizontal
+          div.col-md-12#inputs
+            h2 Input
+            div.col-md-6
+              h3 Hub
+              div.form-group
+                  label.col-md-3.control-label(for="namespace") Namespace
+                  div.col-md-9
+                    input.form-control#namespace(type="text")
+              div.form-group
+                  label.col-md-3.control-label(for="hub-name") Hub Name
+                  div.col-md-9
+                    input.form-control#hub-name(type="text")
+            div.col-md-6
+              h3 Credentials
+              div.form-group
+                label.col-md-3.control-label(for="sender-key-name") Sender Key Name
+                div.col-md-9
+                  input.form-control#sender-key-name(type="text")
+              div.form-group
+                label.col-md-3.control-label(for="sender-key") Sender Key
+                div.col-md-9
+                  input.form-control#sender-key(type="password")
+              div.form-group
+                label.col-md-3.control-label(for="token-ttl") Token TTL min
+                div.col-md-9
+                  input.form-control#token-ttl(type="text" placeholder="60" value="60")
+            div.col-md-12
+              h3 Event
+              div.col-md-12.form-group
+                label.control-label(for="event-payload") Payload
+                textarea.col-md-9.form-control#event-payload
+          div.col-md-12#actions
+            div.col-md-12.form-group
+              button.btn.btn-default#generate-signature Generate Signature
+              button.btn.btn-default#send-event Send Event
+          div.col-md-12#outputs
+            h2 Output
+            div.col-md-12
+              h3 Signature
+              label.contol-label Token
+              textarea.form-control#token

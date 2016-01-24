@@ -15,6 +15,17 @@ var cfenv = require('cfenv');
 // create a new express server
 var app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+// set views
+app.set('view engine', 'jade');
+app.set('views', './views');
+
+// routing
+var routes = require('./routes/index');
+app.use('/', routes);
+
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
