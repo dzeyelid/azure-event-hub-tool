@@ -3,6 +3,6 @@ applications:
   memory: 256M
   instances: 1
   domain: mybluemix.net
-  name: azure-event-hub-tool
-  host: azure-event-hub-tool
+  name: azure-event-hub-tool-dev
+  host: azure-event-hub-tool-dev
   disk_quota: 1024M
