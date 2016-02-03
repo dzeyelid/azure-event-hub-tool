@@ -26,6 +26,7 @@ router.post('/send_event', function(req, res, next) {
 
   // Send Event
   sendEvent(data, token);
+  res.send();
 });
 
 module.exports = router;
@@ -112,8 +113,8 @@ function sendEvent(data, token) {
   
   req.on('error', function(e) {
     console.error(e);
-  });
-  
-  req.write(data.payload);
+  });  
+
+  req.write(data.payload + '\n');
   req.end();
 }
