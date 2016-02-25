@@ -47,7 +47,7 @@ var https = require('https');
  */
 function createSasToken(uri, key_name, key, ttl) {
   // Token expires in one hour
-  var expiry = moment().add(ttl, 'minites').unix();
+  var expiry = moment().add(parseInt(ttl, 10), 'minutes').unix();
   
   var string_to_sign = encodeURIComponent(uri) + '\n' + expiry;
   var hmac = crypto.createHmac('sha256', key);

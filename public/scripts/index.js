@@ -35,7 +35,7 @@ $().ready(function() {
       data: JSON.stringify(data),
       contentType: 'application/json',
       success: function(result) {
-        $('.alert').addClass('alert-info').text('sample');
+        $('.alert').addClass('alert-info').text('Data sent.');
       },
       error: function() {
         showWarning();
